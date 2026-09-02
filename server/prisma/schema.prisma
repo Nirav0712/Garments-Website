@@ -1,0 +1,233 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("ADMIN")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id           String    @id @default(uuid())
+  name         String
+  slug         String    @unique
+  description  String?
+  image        String?
+  isActive     Boolean   @default(true)
+  displayOrder Int       @default(0)
+  products     Product[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Collection {
+  id           String    @id @default(uuid())
+  name         String
+  slug         String    @unique
+  description  String?
+  image        String?
+  badge        String?
+  isActive     Boolean   @default(true)
+  displayOrder Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Size {
+  id           String   @id @default(uuid())
+  name         String   @unique // e.g. "XS", "S", "M", "L", "XL", "XXL", "3XL"
+  code         String?  // e.g. "XS", "S", "M"
+  displayOrder Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Color {
+  id           String   @id @default(uuid())
+  name         String   @unique // e.g. "Midnight Black", "Optic White", "Navy Blue"
+  hexCode      String   // e.g. "#111111"
+  displayOrder Int      @default(0)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Product {
+  id               String         @id @default(uuid())
+  title            String
+  slug             String         @unique
+  sku              String?        @unique
+  brand            String?        @default("PRODUCT LIST")
+  shortDesc        String?
+  fullDesc         String?
+  price            Float
+  salePrice        Float?
+  discount         Float?
+  currency         String         @default("USD")
+  stock            Int            @default(10)
+  stockStatus      String         @default("IN_STOCK") // IN_STOCK, LOW_STOCK, OUT_OF_STOCK
+  isFeatured       Boolean        @default(false)
+  isBestseller     Boolean        @default(false)
+  isNewArrival     Boolean        @default(false)
+  isActive         Boolean        @default(true)
+  categoryId       String?
+  category         Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  collection       String?        // e.g. "Summer Atelier '26", "Urban Streetwear", "Core Basics"
+
+  // Garments & Fashion Specific Attributes
+  gender           String?        @default("UNISEX") // MENS, WOMENS, UNISEX, KIDS
+  fabric           String?        // e.g. "100% Organic Combed Cotton (240 GSM)"
+  material         String?        // e.g. "Organic Cotton"
+  fit              String?        // e.g. "Oversized", "Relaxed Fit", "Tailored", "Slim Fit"
+  pattern          String?        // e.g. "Solid", "Striped", "Checks", "Waffle Texture"
+  season           String?        // e.g. "All Season", "Spring/Summer '26", "Autumn/Winter"
+  occasion         String?        // e.g. "Casual", "Streetwear", "Smart Casual", "Ethnic", "Formal"
+  careInstructions String?        // e.g. "Machine wash cold with similar colors. Line dry in shade."
+  sizes            String?        // JSON stringified array of { name: 'M', inStock: true }
+  colors           String?        // JSON stringified array of { name: 'Black', hex: '#111111', inStock: true }
+  hoverImage       String?        // Alternate hover image
+
+  specifications   String?        // JSON stringified key-value pairs
+  features         String?        // JSON stringified array of feature bullets
+  images           ProductImage[]
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+}
+
+model ProductImage {
+  id           String   @id @default(uuid())
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url          String
+  altText      String?
+  title        String?
+  caption      String?
+  displayOrder Int      @default(0)
+  isThumbnail  Boolean  @default(false)
+  createdAt    DateTime @default(now())
+}
+
+model HeroSlide {
+  id             String   @id @default(uuid())
+  title          String
+  subtitle       String?
+  badge          String?
+  description    String?
+  buttonText     String?  @default("Shop Collection")
+  buttonUrl      String?  @default("/products")
+  image          String
+  overlayOpacity Float    @default(0.4)
+  textPosition   String?  @default("left") // left, center, right
+  displayOrder   Int      @default(0)
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Offer {
+  id           String    @id @default(uuid())
+  title        String
+  subtitle     String?
+  description  String?
+  discountText String?
+  buttonText   String?   @default("Shop Offer")
+  buttonUrl    String?   @default("/offers")
+  image        String?
+  bgImage      String?
+  startDate    DateTime?
+  endDate      DateTime?
+  isActive     Boolean   @default(true)
+  displayOrder Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model PageContent {
+  id         String   @id @default(uuid())
+  sectionKey String   @unique // e.g. "home_featured_heading", "home_seo_content", "about_mission"
+  page       String   @default("home") // home, about, contact, footer
+  title      String?
+  subtitle   String?
+  content    String?
+  image      String?
+  meta       String?  // JSON string for complex section objects
+  updatedAt  DateTime @updatedAt
+}
+
+model NavigationItem {
+  id           String   @id @default(uuid())
+  label        String
+  url          String
+  location     String   @default("HEADER") // HEADER, FOOTER
+  displayOrder Int      @default(0)
+  isActive     Boolean  @default(true)
+  column       String?  @default("Shop") // for footer columns: Shop, Collections, Support, Legal
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model SiteSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String
+  type      String   @default("text") // text, boolean, image, json, color
+  group     String   @default("general") // general, header, footer, contact, appearance, seo
+  updatedAt DateTime @updatedAt
+}
+
+model SEO {
+  id                 String   @id @default(uuid())
+  entityType         String   // PRODUCT, CATEGORY, PAGE, OFFER, GLOBAL
+  entityId           String?  // e.g. productId, categoryId, or pageKey ("home", "products", "about", "contact")
+  seoTitle           String?
+  metaDescription    String?
+  focusKeyword       String?
+  secondaryKeywords  String?
+  slug               String?
+  canonicalUrl       String?
+  robotsIndex        Boolean  @default(true)
+  robotsFollow       Boolean  @default(true)
+  ogTitle            String?
+  ogDescription      String?
+  ogImage            String?
+  twitterTitle       String?
+  twitterDescription String?
+  twitterImage       String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@unique([entityType, entityId])
+}
+
+model Media {
+  id           String   @id @default(uuid())
+  filename     String
+  originalName String
+  url          String
+  mimeType     String
+  size         Int
+  altText      String?
+  createdAt    DateTime @default(now())
+}
+
+model ContactSubmission {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  message   String
+  status    String   @default("UNREAD") // UNREAD, READ, REPLIED, ARCHIVED
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,361 @@
+:root {
+  /* Default Neutral Shopify-Inspired Theme Tokens */
+  --color-primary: #111111;
+  --color-secondary: #555555;
+  --color-accent: #2563EB;
+  --color-background: #FFFFFF;
+  --color-surface: #F8F8F8;
+  --color-card: #FFFFFF;
+  --color-border: #E5E5E5;
+  --color-heading: #111111;
+  --color-text: #555555;
+  --color-button: #111111;
+  --color-button-text: #FFFFFF;
+  --color-button-hover: #333333;
+  --color-header: #FFFFFF;
+  --color-header-text: #111111;
+  --color-footer: #111111;
+  --color-footer-text: #FFFFFF;
+  --color-success: #16A34A;
+  --color-warning: #F59E0B;
+  --color-error: #DC2626;
+
+  --button-radius: 4px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-hover: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --transition: all 0.2s ease;
+}
+
+/* Global Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-main);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.5;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.025em;
+  color: var(--color-heading);
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Container */
+.container-custom {
+  width: 100%;
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .container-custom {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Minimalist Clean Cards */
+.store-card {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+  overflow: hidden;
+}
+
+.store-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Minimalist Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--button-radius);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid transparent;
+  outline: none;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.btn-primary {
+  background-color: var(--color-button);
+  color: var(--color-button-text);
+  border: 1px solid var(--color-button);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-button-hover);
+  border-color: var(--color-button-hover);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-heading);
+  border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-heading);
+  background-color: var(--color-surface);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--color-heading);
+  border: 1px solid var(--color-border);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-heading);
+  color: var(--color-heading);
+  background-color: var(--color-surface);
+}
+
+.btn-danger {
+  background-color: rgba(220, 38, 38, 0.1);
+  color: var(--color-error);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.btn-danger:hover {
+  background-color: var(--color-error);
+  color: #FFFFFF;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  border-radius: var(--button-radius);
+}
+
+.btn-lg {
+  padding: 0.85rem 1.75rem;
+  font-size: 1rem;
+  border-radius: var(--button-radius);
+}
+
+/* Minimal Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-primary {
+  background-color: var(--color-primary);
+  color: var(--color-button-text);
+}
+
+.badge-accent {
+  background-color: var(--color-accent);
+  color: #FFFFFF;
+}
+
+.badge-sale {
+  background-color: var(--color-error);
+  color: #FFFFFF;
+}
+
+.badge-surface {
+  background-color: var(--color-surface);
+  color: var(--color-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.badge-dark {
+  background-color: #111111;
+  color: #FFFFFF;
+}
+
+/* Form Inputs */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1.25rem;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-heading);
+}
+
+.input-field, .select-field, .textarea-field {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-heading);
+  outline: none;
+  transition: var(--transition);
+}
+
+.input-field:focus, .select-field:focus, .textarea-field:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
+}
+
+.input-field::placeholder, .textarea-field::placeholder {
+  color: #9CA3AF;
+}
+
+/* 4-Column Responsive Grid for Shopify Style */
+.grid-products {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 1100px) {
+  .grid-products {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-products {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-products {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+.grid-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.grid-offers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Hero Slider Minimal */
+.hero-slider-wrapper {
+  position: relative;
+  width: 100%;
+  height: 560px;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+@media (max-width: 768px) {
+  .hero-slider-wrapper {
+    height: 440px;
+  }
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease;
+}
+
+.hero-slide.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Skeleton Pulse */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.skeleton {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* Admin Specific Clean Panels */
+.admin-card {
+  background-color: #111827;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  color: #F8FAFC;
+}
+
+.admin-card .form-label {
+  color: #CBD5E1;
+}
+
+.admin-card .input-field, .admin-card .select-field, .admin-card .textarea-field {
+  background-color: #0F172A;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+}
+
+.admin-card .input-field:focus {
+  border-color: #6366F1;
+}
