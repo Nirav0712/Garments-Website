@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const prisma = require('../config/db');
+const { uploadToCloudinary, deleteFromCloudinary } = require('../utils/cloudinary');
 
 // @desc    Get media library list
 // @route   GET /api/media
@@ -56,8 +57,21 @@ const uploadMedia = async (req, res) => {
     const files = req.files || [req.file];
     const uploadedRecords = [];
 
+    const isProduction = process.env.NODE_ENV === 'production';
+
     for (const file of files) {
-      const publicUrl = `/uploads/${file.filename}`;
+      let publicUrl = `/uploads/${file.filename}`;
+
+      if (isProduction) {
+        const localPath = path.join(__dirname, '../../uploads', file.filename);
+        const cloudUrl = await uploadToCloudinary(localPath, 'garments-media');
+
+        if (!cloudUrl) {
+          throw new Error('Failed to upload image to Cloudinary');
+        }
+        publicUrl = cloudUrl;
+      }
+
       const record = await prisma.media.create({
         data: {
           filename: file.filename,
@@ -95,13 +109,17 @@ const deleteMedia = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Media record not found' });
     }
 
-    // Try deleting physical file
-    const filePath = path.join(__dirname, '../../uploads', media.filename);
-    if (fs.existsSync(filePath)) {
-      try {
-        fs.unlinkSync(filePath);
-      } catch (err) {
-        console.warn('Could not delete physical file:', err.message);
+    if (media.url && media.url.includes('cloudinary.com')) {
+      await deleteFromCloudinary(media.url);
+    } else {
+      // Try deleting physical file
+      const filePath = path.join(__dirname, '../../uploads', media.filename);
+      if (fs.existsSync(filePath)) {
+        try {
+          fs.unlinkSync(filePath);
+        } catch (err) {
+          console.warn('Could not delete physical file:', err.message);
+        }
       }
     }
 
