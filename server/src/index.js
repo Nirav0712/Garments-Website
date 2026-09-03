@@ -51,6 +51,23 @@ app.use((req, res) => {
 // Central Error Handler
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`🚀 PRODUCT LIST API Server running on port http://localhost:${PORT}`);
+const server = app.listen(PORT, () => {
+  console.log(`🚀 PRODUCT LIST API Server running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
+});
+
+// Graceful shutdown handling
+process.on('SIGTERM', () => {
+  console.info('SIGTERM signal received. Closing HTTP server...');
+  server.close(() => {
+    console.log('HTTP server closed.');
+    process.exit(0);
+  });
+});
+
+process.on('SIGINT', () => {
+  console.info('SIGINT signal received. Closing HTTP server...');
+  server.close(() => {
+    console.log('HTTP server closed.');
+    process.exit(0);
+  });
 });
