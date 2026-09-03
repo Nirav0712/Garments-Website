@@ -4,6 +4,7 @@
   "description": "Product List Backend API Server",
   "main": "src/index.js",
   "scripts": {
+    "build": "node scripts/set-db-provider.js --force-prod && prisma generate",
     "build:prod": "node scripts/set-db-provider.js --force-prod && prisma generate",
     "prestart": "node scripts/set-db-provider.js && prisma generate",
     "start": "node src/index.js",
